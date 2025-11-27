@@ -41,6 +41,7 @@ export class Core<TStream extends Stream = Stream> {
   static readonly DEFAULT_STREAM_CONFIG: StreamConfig = {
     isP2PUploadDisabled: false,
     isP2PDisabled: false,
+    isHttpDisabled: false,
     simultaneousHttpDownloads: 2,
     simultaneousP2PDownloads: 3,
     highDemandTimeWindow: 15,

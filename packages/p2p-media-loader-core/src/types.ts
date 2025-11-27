@@ -81,7 +81,8 @@ export type DynamicStreamProperties =
   | "validateP2PSegment"
   | "httpRequestSetup"
   | "isP2PDisabled"
-  | "isP2PUploadDisabled";
+  | "isP2PUploadDisabled"
+  | "isHttpDisabled";
 
 /**
  * Represents a dynamically modifiable configuration, allowing updates to selected CoreConfig properties at runtime.
@@ -211,6 +212,20 @@ export type StreamConfig = {
    * ```
    */
   isP2PDisabled: boolean;
+  /**
+   * Controls whether HTTP downloading is disabled for the stream.
+   * If `true`, the stream will only download segments via P2P and will not use HTTP as a fallback.
+   * This forces P2P-only chunk loading.
+   *
+   * WARNING: Enabling this option may cause playback issues if P2P connections are unavailable
+   * or if peers don't have the required segments.
+   *
+   * @default
+   * ```typescript
+   * isHttpDisabled: false
+   * ```
+   */
+  isHttpDisabled: boolean;
   /**
    * Defines the duration of the time window, in seconds, during which segments are pre-loaded to ensure smooth playback.
    * This window helps prioritize the fetching of media segments that are imminent to playback.
