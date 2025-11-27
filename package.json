@@ -38,5 +38,10 @@
       "node-datachannel",
       "utf-8-validate"
     ]
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "node-fetch": "^3.3.2",
+    "pnpm": "^10.23.0"
   }
 }

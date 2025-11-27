@@ -267,9 +267,11 @@ export class HybridLoader {
       simultaneousHttpDownloads,
       simultaneousP2PDownloads,
       httpErrorRetries,
+      isHttpDisabled,
     } = this.config;
 
     if (
+      !isHttpDisabled &&
       this.engineRequest?.shouldBeStartedImmediately &&
       this.engineRequest.status === "pending" &&
       this.requests.executingHttpCount < simultaneousHttpDownloads
@@ -310,13 +312,17 @@ export class HybridLoader {
         const isP2PLoadingRequest =
           request?.status === "loading" && request.downloadSource === "p2p";
 
-        if (this.requests.executingHttpCount < simultaneousHttpDownloads) {
+        if (
+          !isHttpDisabled &&
+          this.requests.executingHttpCount < simultaneousHttpDownloads
+        ) {
           if (isP2PLoadingRequest) request.abortFromProcessQueue();
           this.loadThroughHttp(segment);
           continue;
         }
 
         if (
+          !isHttpDisabled &&
           this.abortLastHttpLoadingInQueueAfterItem(queue, segment) &&
           this.requests.executingHttpCount < simultaneousHttpDownloads
         ) {
@@ -385,7 +391,9 @@ export class HybridLoader {
       this.getAvailableStorageCapacityPercent();
     if (availableStorageCapacityPercent <= 10) return;
 
-    const { simultaneousHttpDownloads, httpErrorRetries } = this.config;
+    const { simultaneousHttpDownloads, httpErrorRetries, isHttpDisabled } =
+      this.config;
+    if (isHttpDisabled) return;
     const p2pLoader = this.p2pLoaders.currentLoader;
 
     if (
